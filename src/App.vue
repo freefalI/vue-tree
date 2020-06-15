@@ -1,28 +1,54 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>{{ msg }}</h1>
+  
+  <div class="panel">
+   <control-panel :item="elems"></control-panel>
+  </div>
+    <tree-item :item="elems"></tree-item>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+var elems = {
+  name: "root",
+  children: [
+    { name: "hello" ,'children':null},
+    { name: "wat",'children':null },
+    {
+      name: "child folder",
+      children: [
+        {
+          name: "child folder",
+          children: [{ name: "hello" ,'children':null }, { name: "wat" ,'children':null }]
+        },
+        { name: "hello",'children':null  },
+        { name: "wat" ,'children':null },
+        {
+          name: "child folder",
+          children: [{ name: "hello" ,'children':null }, { name: "wat", children:[] }]
+        }
+      ]
+    }
+  ]
+};
+import TreeItem from "./components/TreeItem";
+import ControlPanel from "./components/ControlPanel";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    TreeItem,ControlPanel
+  },
+  data: function() {
+    return {
+      msg: "title",
+      elems: elems
+    };
+  },
+  computed: {},
+  methods: {
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
