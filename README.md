@@ -25,15 +25,13 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ## todo 
-+ context menu
-+ backend
-+ vuex
-+ edit resource
-+ SPA
 + tree actions
   + update tree
   + new item
 + item actions (another component or modal)
   + rename
   + edit content 
-
++ edit resource
++ backend
++ vuex
++ SPA

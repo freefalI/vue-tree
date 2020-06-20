@@ -57,7 +57,7 @@
     export default {
         name: "App",
         components: {
-            TreeItem, ControlPanel
+            TreeItem, ControlPanel,
         },
         data: function () {
             return {
@@ -70,3 +70,5 @@
     };
 </script>
 
+<style>
+</style>

@@ -1,24 +1,46 @@
 <template>
     <div class="hello">
         <li>
-            <span @contextmenu.prevent="rightClickTreeItem" :class="{selected: item.isSelected,deleted: deleted}">{{ item.name }}</span>
+            <span @contextmenu.prevent="$refs.menu.open" :class="{selected: item.isSelected,deleted: deleted}">{{ item.name }}</span>
             <button v-show="isFolder" @click="toggle">[{{ item.isOpen ? '-' : '+' }}]</button>
-            <button v-show="!isFolder" @click="makeFolder">make folder</button>
-            <button v-show="isEmptyFolder" @click="unmakeFolder">unmake folder</button>
-            <button v-if="isFolder" @click="makeinner">make inner</button>
-            <button @click="deleteItem">delete</button>
-            <button v-if="!item.isSelected" @click="selectCurrent">select</button>
-            <button v-if="item.isSelected" @click="unselectCurrent">unselect</button>
+
         </li>
         <ul v-if="item.isOpen">
             <tree-item :key="index" v-for="(child, index) in item.children" :item="child"></tree-item>
         </ul>
+        <vue-context ref="menu">
+            <li v-show="!isFolder">
+                <a href="#" @click.prevent="makeFolder">Make folder</a>
+            </li>
+            <li v-show="isEmptyFolder">
+                <a href="#" @click.prevent="unmakeFolder">Unmake folder</a>
+            </li>
+            <li v-if="isFolder">
+                <a href="#" @click.prevent="makeinner">New item</a>
+            </li>
+            <li>
+                <a href="#" @click.prevent="deleteItem">Delete</a>
+            </li>
+            <li v-if="!item.isSelected">
+                <a href="#" @click.prevent="selectCurrent">Select</a>
+            </li>
+            <li v-if="item.isSelected">
+                <a href="#" @click.prevent="unselectCurrent">Unselect</a>
+            </li>
+
+
+        </vue-context>
     </div>
 </template>
 
 <script>
+    import {VueContext} from 'vue-context';
+
     export default {
         name: "TreeItem",
+        components: {
+            VueContext,
+        },
         props: {
             msg: String,
             item: Object
@@ -71,7 +93,7 @@
             },
             makeinner: function () {
                 console.log('makeinner');
-                this.item.children.push({name: "new item", children: null, isSelected: false,isOpen:false});
+                this.item.children.push({name: "new item", children: null, isSelected: false, isOpen: false});
                 //this.isFolder = true;
             },
             deleteItem: function () {
@@ -96,16 +118,18 @@
             }
 
         },
-      watch: {
-        // myprop: function(newVal, oldVal) { // watch it
-        //   console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-        // }
-      }
+        watch: {
+            // myprop: function(newVal, oldVal) { // watch it
+            //   console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+            // }
+        }
     };
 </script>
 
 
 <style>
+    @import '~vue-context/dist/css/vue-context.css';
+
     .selected {
         color: cornflowerblue;
     }
