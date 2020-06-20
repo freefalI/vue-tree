@@ -25,4 +25,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ## todo 
-+ new item buton near parent item or in end of list
++ context menu
++ backend
++ vuex
++ edit resource
++ SPA
++ tree actions
+  + update tree
+  + new item
++ item actions (another component or modal)
+  + rename
+  + edit content 
+
