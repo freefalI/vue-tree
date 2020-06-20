@@ -1,14 +1,14 @@
 <template>
   <div class="hello">
     <li  v-if="!deleted">
-      <span  @contextmenu.prevent="rightClickTreeItem"   :class="{red: isSelected}">{{ item.name }}</span>
+      <span  @contextmenu.prevent="rightClickTreeItem"   :class="{red: item.isSelected}">{{ item.name }}</span>
       <button v-show="isFolder"  @click="toggle">[{{ isOpen ? '-' : '+' }}]</button>
       <button v-show="!isFolder" @click="makeFolder">make folder</button>
       <button v-show="isEmptyFolder" @click="unmakeFolder">unmake folder</button>
       <button v-if="isFolder" @click="makeinner">make inner</button>
       <button  @click="delete1">delete</button>
-      <button  v-if="!isSelected"  @click="selectCurrent">select</button>
-       <button  v-if="isSelected"  @click="unselectCurrent">unselect</button>
+      <button  v-if="!item.isSelected"  @click="selectCurrent">select</button>
+       <button  v-if="item.isSelected"  @click="unselectCurrent">unselect</button>
     </li>
     <ul  v-if="isOpen">
       <tree-item :key="index" v-for="(child, index) in item.children" :item="child"></tree-item>
@@ -26,7 +26,7 @@ export default {
   data: function() {
     return {
       isOpen: false,
-      isSelected:false,
+    //  isSelected:false,
       deleted:false
     };
   },
@@ -76,20 +76,24 @@ export default {
        //this.isFolder = true;
     },
       delete1: function() {
-      console.log('delete');
+    
       this.item.children=null
       this.item.name= 'deleted'
       this.deleted= true
-      this.$destroy();
+        this.$parent.model.children.$remove(this.model)
+         // this.$destroy();
     },
     rightClickTreeItem:function(){
       console.log('context')
     },
     selectCurrent:function(){
-      this.isSelected=true;
+      console.log(  this.item)
+      this.item.isSelected=true;
+    //  console.log(  this.item)
+
     },
-      unselectCurrent:function(){
-       this.isSelected=false;
+    unselectCurrent:function(){
+       this.item.isSelected=false;
     }
 
   }

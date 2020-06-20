@@ -13,24 +13,28 @@
 var elems = {
   name: "root",
   children: [
-    { name: "hello" ,'children':null},
-    { name: "wat",'children':null },
+    {name: "hello", children: null, isSelected: false},
+    {name: "wat", children: null, isSelected: false},
     {
       name: "child folder",
+      isSelected: false,
       children: [
         {
-          name: "child folder",
-          children: [{ name: "hello" ,'children':null }, { name: "wat" ,'children':null }]
+          name: "child folder2",
+          isSelected: false,
+          children: [{name: "hello4", children: null,  isSelected: false,}, {name: "wat", children: null,  isSelected: false,}]
         },
-        { name: "hello",'children':null  },
-        { name: "wat" ,'children':null },
+        {name: "hello5", children: null,  isSelected: false,},
+        {name: "wat4", children: null,  isSelected: false,},
         {
-          name: "child folder",
-          children: [{ name: "hello" ,'children':null }, { name: "wat", children:[] }]
+          name: "child folder3",
+          isSelected: false,
+          children: [{name: "hello6", children: null,  isSelected: false,}, {name: "wat43", children: [],  isSelected: false}]
         }
       ]
     }
-  ]
+  ],
+  isSelected:false
 };
 import TreeItem from "./components/TreeItem";
 import ControlPanel from "./components/ControlPanel";
