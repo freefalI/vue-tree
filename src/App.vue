@@ -1,11 +1,14 @@
 <template>
     <div id="app">
-        <h1>{{ msg }}</h1>
+        <div class="sitebar">
+            <h1>{{ msg }}</h1>
 
-        <div class="panel">
-            <control-panel :item="elems"></control-panel>
+            <div class="panel">
+                <control-panel :item="elems"></control-panel>
+            </div>
+            <tree-item :item="elems" @edit="startEditing" @unselectAll="unselectAll"></tree-item>
         </div>
-        <tree-item :item="elems"></tree-item>
+        <document :item="document" v-show="editingEnabled"></document>
     </div>
 </template>
 
@@ -51,24 +54,57 @@
         isSelected: false,
         isOpen: true
     };
+
+    var document = {name:'old'};
+
     import TreeItem from "./components/TreeItem";
     import ControlPanel from "./components/ControlPanel";
+    import Document from "./components/Document";
+
+    const unselectAllHelper = (item) => {
+        for (var key in item.children) {
+            unselectAllHelper(item.children[key]);
+        }
+        item.isSelected = false;
+    }
 
     export default {
         name: "App",
         components: {
-            TreeItem, ControlPanel,
+            TreeItem, ControlPanel, Document
         },
         data: function () {
             return {
-                msg: "title",
-                elems: elems
+                msg: "Application title",
+                elems: elems,
+                document: document,
+                editingEnabled: false
             };
         },
         computed: {},
-        methods: {}
+        methods: {
+            startEditing:function (payload) {
+                //console.log(payload)
+                this.editingEnabled=true
+                this.document.name = payload.name
+                this.document.isSelected = true
+                this.document.description = payload.name + ' description'
+                this.document.content = payload.name + ' content'
+            },
+            unselectAll:function () {
+                unselectAllHelper(this.elems);
+            }
+        }
     };
 </script>
 
 <style>
+    .sitebar {
+        width: 400px;
+        float: left;
+    }
+
+    .document-area {
+        float: left;
+    }
 </style>
