@@ -107,9 +107,6 @@
                 //this.$parent.model.children.$remove(this.model)
                 // this.$destroy();
             },
-            rightClickTreeItem: function () {
-                console.log('context')
-            },
             selectCurrent: function () {
                 console.log(this.item)
                 this.item.isSelected = true;

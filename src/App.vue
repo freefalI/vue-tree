@@ -86,8 +86,8 @@
             startEditing:function (payload) {
                 //console.log(payload)
                 this.editingEnabled=true
-                this.document.name = payload.name
                 this.document.isSelected = true
+                this.document.name = payload.name
                 this.document.description = payload.name + ' description'
                 this.document.content = payload.name + ' content'
             },
