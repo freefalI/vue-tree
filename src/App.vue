@@ -8,54 +8,12 @@
             </div>
             <tree-item :item="elems" @edit="startEditing" @unselectAll="unselectAll"></tree-item>
         </div>
-        <document :item="document" v-show="editingEnabled"></document>
+        <document :item="document" v-show="editingEnabled" @saveDocument="saveDocument"></document>
     </div>
 </template>
 
 <script>
-    var elems = {
-        name: "root",
-        children: [
-            {name: "hello", children: null, isSelected: false, isOpen: false},
-            {name: "wat", children: null, isSelected: false, isOpen: false},
-            {
-                name: "child folder",
-                isSelected: false,
-                isOpen: false,
-                children: [
-                    {
-                        name: "child folder2",
-                        isSelected: false,
-                        isOpen: false,
-                        children: [{name: "hello4", children: null, isSelected: false, isOpen: false}, {
-                            name: "wat",
-                            children: null,
-                            isSelected: false,
-                            isOpen: false
-                        }]
-                    },
-                    {name: "hello5", children: null, isSelected: false, isOpen: false},
-                    {name: "wat4", children: null, isSelected: false, isOpen: false},
-                    {
-                        name: "child folder3",
-                        isSelected: false,
-                        isOpen: false,
-                        children: [{name: "hello6", children: null, isSelected: false, isOpen: false}, {
-                            name: "wat43",
-                            children: [],
-                            isSelected: false,
-                            isOpen: false
-
-                        }]
-                    }
-                ]
-            }
-        ],
-        isSelected: false,
-        isOpen: true
-    };
-
-    var document = {name:'old'};
+    var document = {name: 'old'};
 
     import TreeItem from "./components/TreeItem";
     import ControlPanel from "./components/ControlPanel";
@@ -76,23 +34,62 @@
         data: function () {
             return {
                 msg: "Application title",
-                elems: elems,
+                elems: {},
                 document: document,
                 editingEnabled: false
             };
         },
+        mounted: function () {
+
+            let api = 'http://127.0.0.1/api/tree';
+            this.axios.get(api).then((response) => {
+                console.log(response.data.data[0])
+                this.elems = response.data.data[0]
+
+            })
+        },
         computed: {},
         methods: {
-            startEditing:function (payload) {
-                //console.log(payload)
-                this.editingEnabled=true
+            startEditing: function (payload) {
+                console.log(payload)
+                console.log(3)
+                if (payload.id) {
+                    let api = 'http://127.0.0.1/api/documents/' + payload.id;
+                    this.axios.get(api).then((response) => {
+                        this.document = response.data
+                    })
+                } else {
+                    this.document.name = payload.name
+                    this.document.description = ''
+                    this.document.content = ''
+                }
+                this.editingEnabled = true
                 this.document.isSelected = true
-                this.document.name = payload.name
-                this.document.description = payload.name + ' description'
-                this.document.content = payload.name + ' content'
             },
-            unselectAll:function () {
+            unselectAll: function () {
                 unselectAllHelper(this.elems);
+            },
+            saveDocument: function (payload) {
+                console.log(payload)
+                if (payload.id) {
+                    let api = 'http://127.0.0.1/api/documents/' + payload.id;
+                    this.axios.put(api, payload).then((response) => {
+                        console.log(response.data)
+                    })
+                } else {
+                    let api = 'http://127.0.0.1/api/documents';
+                    //   payload.parentId = this.$parent.item.id
+                    this.axios.post(api, payload).then((response) => {
+                        console.log(response.data)
+                    })
+                }
+                //todo refactor this - reload tree structure
+                let api = 'http://127.0.0.1/api/tree';
+                this.axios.get(api).then((response) => {
+                    console.log(response.data.data[0])
+                    this.elems = response.data.data[0]
+
+                })
             }
         }
     };

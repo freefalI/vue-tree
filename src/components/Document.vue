@@ -14,7 +14,7 @@
         <textarea name="content" v-model="item.content"></textarea>
         <br>
         <br>
-        <button id="save-document">Save</button>
+        <button id="save-document" @click="$emit('saveDocument',item)">Save</button>
     </div>
 
 </template>
